@@ -1,0 +1,10 @@
+groups:
+- name: example rules
+  rules:
+  - alert: ExampleDown
+    expr: up{job="example"} == 0
+    for: 1m
+    labels:
+      severity: page
+    annotations:
+      summary: '{{ $labels.instance }} is down'

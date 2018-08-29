@@ -1,0 +1,21 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'pagerduty'
+receivers:
+- name: pagerduty
+  pagerduty_configs:
+  - send_resolved: true
+    routing_key: KEYGOESHERE
+    description: '{{ .GroupLabels.alertname }}'
+    details:
+      summary: |-
+        {{ range .Alerts }}{{ .Annotations.summary }}
+        {{ end }}
+      severity: '{{ .CommonLabels.severity }}'
+      status: '{{ .Status }}'
